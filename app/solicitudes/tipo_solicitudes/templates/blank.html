@@ -60,16 +60,17 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'agrega_solicitud' %}"
-                ><i class="fas fa-user"></i><span>Agregar solicitud</span></a
+              <a class="nav-link" href="{% url 'lista_tipo_solicitudes' %}"
+                ><i class="fas fa-tachometer-alt"></i
+                ><span>Tipo Solicitudes</span></a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'lista_tipo_solicitudes' %}"
-                ><i class="fas fa-tachometer-alt"></i
-                ><span>Lista Tipo Solicitudes</span></a
-              >
-            </li>
+              <a class="nav-link" href="{% url 'lista_formularios' %}"
+              ><i class="fas fa-user"></i
+                ><span>Formularios de solicitud</span></a
+                >
+              </li>
             {% if user.is_authenticated and user.puede_atender_solicitudes %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'listar_solicitudes' %}"
