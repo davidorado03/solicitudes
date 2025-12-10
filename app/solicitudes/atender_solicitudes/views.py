@@ -27,7 +27,8 @@ def atender_solicitud(request, solicitud_id: int):
     ultimo = solicitud.seguimientos.order_by('-fecha_creacion').first()
     responsable_rol = MATCH_RESPONSABLES.get(request.user.rol) or "5"
     if solicitud.tipo_solicitud.responsable != responsable_rol:
-        messages.error(request, 'No tienes permiso para atender esta solicitud.')
+        messages.error(
+            request, 'No tienes permiso para atender esta solicitud.')
         return redirect('bienvenida')
     context = {
         'solicitud': solicitud,
@@ -46,14 +47,16 @@ def marcar_solicitud_en_proceso(request, solicitud_id: int):
     ultimo = solicitud.seguimientos.order_by('-fecha_creacion').first()
     responsable_rol = MATCH_RESPONSABLES.get(request.user.rol) or "5"
     if solicitud.tipo_solicitud.responsable != responsable_rol:
-        messages.error(request, 'No tienes permiso para atender esta solicitud.')
+        messages.error(
+            request, 'No tienes permiso para atender esta solicitud.')
         return redirect('bienvenida')
     if not ultimo or ultimo.estatus != '1':
         messages.error(
             request, 'No se puede cambiar el estatus: la solicitud no está en estado Creada.'
         )
         return redirect('atender_solicitud', solicitud_id=solicitud_id)
-    SeguimientoSolicitud.objects.create(solicitud=solicitud, estatus='2', observaciones='')
+    SeguimientoSolicitud.objects.create(
+        solicitud=solicitud, estatus='2', observaciones='')
     messages.success(request, 'La solicitud fue marcada como En proceso.')
     return redirect('atender_solicitud', solicitud_id=solicitud_id)
 
@@ -64,7 +67,8 @@ def cerrar_solicitud(request, solicitud_id: int):
     solicitud = get_object_or_404(Solicitud, id=solicitud_id)
     responsable_rol = MATCH_RESPONSABLES.get(request.user.rol) or "5"
     if solicitud.tipo_solicitud.responsable != responsable_rol:
-        messages.error(request, 'No tienes permiso para atender esta solicitud.')
+        messages.error(
+            request, 'No tienes permiso para atender esta solicitud.')
         return redirect('bienvenida')
     ultimo = solicitud.seguimientos.order_by('-fecha_creacion').first()
     if not ultimo or ultimo.estatus != '2':
@@ -121,7 +125,8 @@ def listar_solicitudes(request):
 
     # Filtrar por el rol responsable si aplica (1-4). '5' es para evitar errores
     if responsable_rol in ['1', '2', '3', '4']:
-        solicitudes_qs = solicitudes_qs.filter(tipo_solicitud__responsable=responsable_rol)
+        solicitudes_qs = solicitudes_qs.filter(
+            tipo_solicitud__responsable=responsable_rol)
 
     # Conteos para tabs
     base_qs = solicitudes_qs
