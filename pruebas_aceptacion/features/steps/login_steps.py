@@ -4,7 +4,8 @@ from django.urls import reverse
 from solicitudes_app.models import Usuario
 
 
-@given('que existe un usuario con username "{username}" y password "{password}" y rol "{rol}"')
+@given(
+    'que existe un usuario con username "{username}" y password "{password}" y rol "{rol}"')
 def step_crear_usuario(context, username, password, rol):
     context.usuario = Usuario.objects.create_user(
         username=username,
@@ -58,17 +59,19 @@ def step_redirigido_bienvenida(context):
         assert context.response.status_code in [200, 302], \
             f"Registro no redirigió, código: {context.response.status_code}"
         return
-    
+
     assert context.response.status_code == 200
-    # Más flexible: acepta cualquier URL que contenga 'bienvenida' o sea el reverse exacto
+    # Más flexible: acepta cualquier URL que contenga 'bienvenida' o sea el
+    # reverse exacto
     if context.response.redirect_chain:
         last_url = context.response.redirect_chain[-1][0]
         # Acepta bienvenida o login (para casos de registro)
         assert reverse('bienvenida') in last_url or 'bienvenida' in last_url or \
-               'login' in last_url, \
+            'login' in last_url, \
             f"Expected redirect to bienvenida or login, got: {last_url}"
     else:
-        # Si no hay redirect_chain, verifica que la URL actual sea bienvenida o login
+        # Si no hay redirect_chain, verifica que la URL actual sea bienvenida o
+        # login
         path_info = context.response.request.get('PATH_INFO', '')
         assert 'bienvenida' in path_info or 'login' in path_info or \
                path_info == reverse('bienvenida'), \
@@ -82,9 +85,9 @@ def step_ver_mensaje(context, mensaje):
     mensaje_lower = mensaje.lower()
     content_lower = content.lower()
     assert mensaje_lower in content_lower or \
-           mensaje_lower.replace('@', 'a') in content_lower or \
-           mensaje_lower.replace('@', 'o') in content_lower, \
-           f"No se encontró '{mensaje}' (o variación) en la respuesta"
+        mensaje_lower.replace('@', 'a') in content_lower or \
+        mensaje_lower.replace('@', 'o') in content_lower, \
+        f"No se encontró '{mensaje}' (o variación) en la respuesta"
 
 
 @then('el usuario permanece en la página de login')
@@ -104,11 +107,15 @@ def step_acceder_perfil_sin_auth(context):
 @then('el usuario es redirigido a la página de login')
 def step_redirigido_login(context):
     # Si se usó follow=True, verificar redirect_chain
-    if hasattr(context.response, 'redirect_chain') and context.response.redirect_chain:
+    if hasattr(
+            context.response,
+            'redirect_chain') and context.response.redirect_chain:
         assert context.response.status_code == 200
-        # Verificar que la última URL en la cadena de redirecciones contiene login
+        # Verificar que la última URL en la cadena de redirecciones contiene
+        # login
         last_url = context.response.redirect_chain[-1][0]
-        assert 'login' in last_url.lower(), f"Expected login in URL but got {last_url}"
+        assert 'login' in last_url.lower(
+        ), f"Expected login in URL but got {last_url}"
     else:
         # Redirección sin follow
         assert context.response.status_code == 302
@@ -117,7 +124,8 @@ def step_redirigido_login(context):
 
 @when('el usuario hace clic en cerrar sesión')
 def step_cerrar_sesion(context):
-    context.response = context.client.get(reverse('solicitudes_app:logout'), follow=True)
+    context.response = context.client.get(
+        reverse('solicitudes_app:logout'), follow=True)
 
 
 @given('que existe un usuario con username "{username}" y perfil incompleto')

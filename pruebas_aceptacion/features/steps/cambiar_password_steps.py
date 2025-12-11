@@ -27,7 +27,8 @@ def step_admin_debe_cambiar_password(context):
     context.admin_user.save()
 
 
-@given('que existe el usuario admin con password "{password}" que debe cambiar contraseña')
+@given(
+    'que existe el usuario admin con password "{password}" que debe cambiar contraseña')
 def step_admin_con_password_debe_cambiar(context, password):
     """Crea admin con contraseña específica y debe_cambiar_password=True"""
     Usuario.objects.filter(username='admin').delete()
@@ -89,7 +90,8 @@ def step_admin_autenticado(context):
 @given('que el usuario está en la página de cambio de contraseña')
 def step_en_pagina_cambiar_password(context):
     """Navega a la página de cambio de contraseña"""
-    context.response = context.client.get(reverse('solicitudes_app:cambiar_password'))
+    context.response = context.client.get(
+        reverse('solicitudes_app:cambiar_password'))
     assert context.response.status_code == 200
 
 
@@ -169,7 +171,8 @@ def step_mensaje_cambiar_password(context):
 @then('el usuario es redirigido a la página de cambio de contraseña')
 def step_redirigido_cambiar_password(context):
     """Verifica redirección a cambio de contraseña"""
-    assert context.response.redirect_chain[-1][0] == reverse('solicitudes_app:cambiar_password')
+    assert context.response.redirect_chain[-1][0] == reverse(
+        'solicitudes_app:cambiar_password')
 
 
 @then('ve el mensaje indicando que debe cambiar su contraseña')
@@ -205,12 +208,14 @@ def step_password_actualizada(context):
         usuario = Usuario.objects.get(username=context.admin_user.username)
     else:
         raise ValueError("No se encontró usuario en el contexto")
-    
+
     # Verifica que la contraseña cambió
-    password_cambiada = usuario.check_password(context.form_data['new_password1'])
+    password_cambiada = usuario.check_password(
+        context.form_data['new_password1'])
     if not password_cambiada:
-        raise AssertionError(f"La contraseña no cambió para el usuario {usuario.username}. "
-                           f"Password esperada: {context.form_data['new_password1']}")
+        raise AssertionError(
+            f"La contraseña no cambió para el usuario {usuario.username}. "
+            f"Password esperada: {context.form_data['new_password1']}")
     assert password_cambiada
 
 
@@ -224,7 +229,8 @@ def step_flag_debe_cambiar_false(context):
 @then('el usuario es redirigido a la página de completar perfil')
 def step_redirigido_completar_perfil(context):
     """Verifica redirección a completar perfil"""
-    assert reverse('solicitudes_app:perfil') in context.response.redirect_chain[-1][0]
+    assert reverse(
+        'solicitudes_app:perfil') in context.response.redirect_chain[-1][0]
 
 
 @then('ve un mensaje de error indicando que la contraseña es demasiado común')
@@ -238,7 +244,8 @@ def step_error_password_comun(context):
 def step_error_password_corta(context):
     """Verifica error de contraseña corta"""
     content = context.response.content.decode('utf-8')
-    assert '8' in content and ('caracteres' in content.lower() or 'characters' in content.lower())
+    assert '8' in content and (
+        'caracteres' in content.lower() or 'characters' in content.lower())
 
 
 @then('permanece en la página de cambio de contraseña')
@@ -272,11 +279,12 @@ def step_error_password_similar_username(context):
 def step_redirigido_auto_cambiar_password(context):
     """Verifica redirección automática a cambio de contraseña"""
     assert context.response.redirect_chain[-1][0] == reverse('solicitudes_app:cambiar_password') or \
-           'cambiar-password' in context.response.redirect_chain[-1][0]
+        'cambiar-password' in context.response.redirect_chain[-1][0]
 
 
 @then('ve un mensaje indicando que debe cambiar su contraseña por seguridad')
 def step_ve_mensaje_debe_cambiar_seguridad(context):
     """Verifica mensaje de seguridad sobre cambio obligatorio"""
     content = context.response.content.decode('utf-8')
-    assert 'seguridad' in content.lower() or 'debe' in content.lower() or 'obligatorio' in content.lower()
+    assert 'seguridad' in content.lower() or 'debe' in content.lower(
+    ) or 'obligatorio' in content.lower()

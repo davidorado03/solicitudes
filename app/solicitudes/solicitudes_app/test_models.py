@@ -1,12 +1,5 @@
 """Tests unitarios consolidados varios (DSM5)
-Incluye tests espec?ficos, extremos y de cobertura final"""
-
-
-# === test_ultra_specific.py ===
-
-"""
-Tests finales ultra-especificos para alcanzar 95% en DSM5
-"""
+Incluye tests especificos y otros casos especiales"""
 from django.test import TestCase, Client
 from django.urls import reverse
 from solicitudes_app.models import Usuario
@@ -385,12 +378,6 @@ class ViewsRegistroFormErrorMessageTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
-
-# === test_extreme_coverage.py ===
-
-"""
-Tests finales extremadamente especificos para DSM5 - Empuje final al 95%
-"""
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.messages import get_messages
@@ -675,12 +662,6 @@ class RegistroFormEmailLowercaseTest(TestCase):
             # El email deberia estar en minusculas
             self.assertEqual(form.cleaned_data['email'], 'test@example.com')
 
-
-# === test_final_coverage.py ===
-
-"""
-Tests para cubrir lineas faltantes en decorators.py y views.py (DSM5)
-"""
 from django.test import TestCase, Client
 from django.urls import reverse
 from solicitudes_app.models import Usuario
